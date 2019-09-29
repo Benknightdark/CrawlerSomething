@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:build":"tsc -w",
-    "start:run":"nodemon ./dist/index.js",
-    "start":"concurrently npm:start:* ",
-    "build" :"tsc"
+    "start:build": "tsc -w",
+    "start:run": "nodemon ./dist/index.js",
+    "start": "concurrently npm:start:* ",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
