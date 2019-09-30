@@ -1,5 +1,6 @@
 version: '3.1'
 services:
+#----------------------Message Bus Server---------------------------------#
   rabbitmq:
       hostname: 'rabbitmq'
       image: "rabbitmq:3-management"
@@ -13,7 +14,7 @@ services:
         - "15672:15672"
       volumes:
         - 'rabbitmq_data:/data'  
-#-----------For Business DB, Event Store and Query DB----------------- #
+#-----------MongoDB Server----------------- #
   mongo:
     image: mongo
     restart: always
