@@ -5,4 +5,11 @@
 - MessageBus (python)
 - MessageBroker (RabbitMQ)
 - MongoDB
+  ````
+  {
+      "url",
+      "content",
+      "createTime"
+  }
+  ````
 - MongoDB Management

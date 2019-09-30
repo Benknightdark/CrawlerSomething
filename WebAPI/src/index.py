@@ -1,4 +1,4 @@
-from flask import jsonify, Flask, Response,json
+from flask import jsonify, Flask, Response,json,request
 from werkzeug.exceptions import HTTPException
 from config import DevConfig
 from config import ProdConfig
@@ -40,11 +40,12 @@ def handle_exception(e):
     return response
 
 
-@app.route('/user/<username>')
+@app.route('/user/<username>',methods=['GET', 'POST'])
 def show_user_profile(username):
     # show the user profile for that user
-  
-    return   Response('User %s' % escape(username), mimetype='application/json')
+    content = request.get_json(silent=True)
+    print(content)
+    return   Response(dumps(content), mimetype='application/json')
 
 @app.route('/post/<int:post_id>')
 def show_post(post_id):
