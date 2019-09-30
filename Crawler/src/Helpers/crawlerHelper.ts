@@ -2,7 +2,7 @@ import * as puppeteer from 'puppeteer';
 import * as cheerio from 'cheerio';
 export const crawlClient=async (config:ClientConfig)=>{
     const browser = await puppeteer.launch({ headless: true,
-        executablePath: '/usr/bin/chromium-browser',
+        //executablePath: '/usr/bin/chromium-browser',
         args: [
         // Required for Docker version of Puppeteer
       '--no-sandbox',

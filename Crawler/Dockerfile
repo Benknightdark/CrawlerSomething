@@ -1,47 +1,42 @@
-FROM node:alpine as build
+# FROM node:alpine as build
 
-ENV NODE_ENV production
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN npm install typescript --save-dev
-RUN npm install --production --silent 
-COPY . .
+# # ENV NODE_ENV production
+# WORKDIR /usr/src/app
+# COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
+# #RUN npm install typescript --save-dev
+# RUN npm install  --silent 
+# # --production 
+# COPY . .
+# RUN apk add --nocache udev ttf-freefont chromium git
+# ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+# ENV CHROMIUM_PATH /usr/bin/chromium-browser
+# CMD npm run build
+# CMD node ./dist/index.js
+
+
+# FROM  crawler:latest 
+# COPY --from=build /usr/src/app/. .
 
 
 
-
-CMD npm run build
-
-
-
-FROM alpine:edge
-
-# Installs latest Chromium (76) package.
-RUN apk add --no-cache \
-      chromium \
-      nss \
-      freetype \
-      freetype-dev \
-      harfbuzz \
-      ca-certificates \
-      ttf-freefont \
-      nodejs \
-      yarn 
-# Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-
-# Puppeteer v1.17.0 works with Chromium 76.
-RUN yarn add puppeteer@1.17.0
-
+FROM kinlan/puppets:latest
 # Add user so we don't need --no-sandbox.
-RUN addgroup -S pptruser && adduser -S -g pptruser pptruser \
-    && mkdir -p /home/pptruser/Downloads /app \
+RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
+    && mkdir -p /home/pptruser/Downloads \
     && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser /app
+    && chown -R pptruser:pptruser ./node_modules
 
 # Run everything after as non-privileged user.
 USER pptruser
-COPY --from=build /usr/src/app/node_modules .
-COPY --from=build /usr/src/app/dist/. .
 
-CMD node index.js
+# Copy the app
+COPY . /app/
+#COPY local.conf /etc/fonts/local.conf
+WORKDIR app
+RUN npm i
+RUN npm run build
+
+
+EXPOSE 8084
+ENTRYPOINT ["dumb-init", "--"]
+CMD node ./dist/index.js
