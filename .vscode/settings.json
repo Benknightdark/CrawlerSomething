@@ -1,6 +1,6 @@
 {
     "git.ignoreLimitWarning": true,
-    "python.pythonPath": "D:\\anaconda\\envs\\ben\\python.exe",
+    "python.pythonPath": "/anaconda3/envs/python37/bin/python",
     "python.linting.enabled": true,
     "python.formatting.provider": "yapf"
 }
