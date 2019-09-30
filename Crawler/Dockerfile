@@ -14,12 +14,20 @@
 # CMD node ./dist/index.js
 
 
-# FROM  crawler:latest 
-# COPY --from=build /usr/src/app/. .
 
 
 
-FROM kinlan/puppets:latest
+
+#FROM kinlan/puppets:latest
+FROM benpuppeteer
+
+
+# Copy the app
+COPY . /app/
+#COPY local.conf /etc/fonts/local.conf
+WORKDIR app
+RUN npm i
+RUN npm run build
 # Add user so we don't need --no-sandbox.
 RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
     && mkdir -p /home/pptruser/Downloads \
@@ -28,14 +36,6 @@ RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
 
 # Run everything after as non-privileged user.
 USER pptruser
-
-# Copy the app
-COPY . /app/
-#COPY local.conf /etc/fonts/local.conf
-WORKDIR app
-RUN npm i
-RUN npm run build
-
 
 EXPOSE 8084
 ENTRYPOINT ["dumb-init", "--"]
