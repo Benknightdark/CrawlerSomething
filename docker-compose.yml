@@ -1,5 +1,18 @@
 version: '3.1'
 services:
+  rabbitmq:
+      hostname: 'rabbitmq'
+      image: "rabbitmq:3-management"
+      environment:
+        RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+        RABBITMQ_DEFAULT_USER: "rabbitmq"
+        RABBITMQ_DEFAULT_PASS: "rabbitmq"
+        RABBITMQ_DEFAULT_VHOST: "/"
+      ports:
+        - "5672:5672"
+        - "15672:15672"
+      volumes:
+        - 'rabbitmq_data:/data'  
 #-----------For Business DB, Event Store and Query DB----------------- #
   mongo:
     image: mongo
@@ -22,4 +35,5 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example     
 #-------------Persistent Volumes-------------------- #
 volumes:
-  mongodb:     
+  mongodb:
+  rabbitmq_data:     
