@@ -1,9 +1,18 @@
 from flask import Flask
 from config import DevConfig
+from config import ProdConfig
+import os
+if "ENV"  not  in os.environ:
+    config = DevConfig
+else:
+    if os.environ['ENV'] == 'prod':
+        config = ProdConfig
+    else:
+        config = DevConfig
 
 # 初始化 Flask 類別成為 instance
 app = Flask(__name__)
-app.config.from_object(DevConfig)
+app.config.from_object(config)
 
 # 路由和處理函式配對
 @app.route('/')
