@@ -1,34 +1,21 @@
-from flask import jsonify, Flask, Response,json,request
-from Shared.CustomErrorHandler import InvalidUsage
-from Middlewares.HttpMiddleware import HTTPMethodOverrideMiddleware
-from werkzeug.exceptions import HTTPException
-from config import DevConfig
-from config import ProdConfig
 from bson.json_util import dumps
-from  html import escape
-import DB.DataBase
+from flask import Flask, Response, json, jsonify, request
+from werkzeug.exceptions import HTTPException
 from Api.ITHomeApi import ithome_blueprint
-import os
-if "CONFIG" not in os.environ:
-    config = DevConfig
-else:
-    if os.environ['CONFIG'] == 'prod':
-        config = ProdConfig
-    else:
-        config = DevConfig
+from Api.UserApi import user_blueprint
+from config import get_env
+from Middlewares.HttpMiddleware import HTTPMethodOverrideMiddleware
+from Shared.CustomErrorHandler import InvalidUsage
 
 # 初始化 Flask 類別成為 instance
 app = Flask(__name__)
-app.config.from_object(config)
+app.config.from_object(get_env())
 app.wsgi_app = HTTPMethodOverrideMiddleware(app.wsgi_app)
 
-app.register_blueprint(ithome_blueprint, url_prefix='/api')
+app.register_blueprint(ithome_blueprint, url_prefix='/api/ithome')
 
-# # 路由和處理函式配對
-# @app.route('/api/ithome')
-# def Get():
-#     data = DB.DataBase.ListCollection(config.CONNECTSTRING)
-#     return Response(dumps(data), mimetype='application/json')
+app.register_blueprint(user_blueprint)
+
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
@@ -49,22 +36,7 @@ def handle_invalid_usage(error):
     response.status_code = error.status_code
     return response
 
-@app.route('/user/<username>',methods=['GET', 'POST'])
-def show_user_profile(username):
-    # show the user profile for that user
-    content = request.get_json(silent=True)
-    print(content)
-    return   Response(dumps(content), mimetype='application/json')
 
-@app.route('/post/<int:post_id>')
-def show_post(post_id):
-    # show the post with the given id, the id is an integer
-    return 'Post %d' % post_id
-
-@app.route('/path/<path:subpath>')
-def show_subpath(subpath):
-    # show the subpath after /path/
-    return 'Subpath %s' % escape(subpath)
 # 判斷自己執行非被當做引入的模組，因為 __name__ 這變數若被當做模組引入使用就不會是 __main__
 if __name__ == '__main__':
     app.run(host='0.0.0.0')

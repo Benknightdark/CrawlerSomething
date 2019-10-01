@@ -10,7 +10,7 @@ class DevConfig(Config):
     CONNECTSTRING='mongodb://root:example@localhost:1769/'
     
 
-def get_env(config):
+def get_env():
     if "CONFIG" not in os.environ:
         return DevConfig
     else:
