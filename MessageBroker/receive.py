@@ -29,11 +29,7 @@ print(RabbitmqConnectString)
 
 
 def callback(ch, method, properties, body):
-    print('fadsfadsf')
-    #print(body.decode("utf8"))
     dd=json.loads(body)
-    print(dd)
-   # print(ListCollection().insert_one(dd))
     ListCollection().insert_one(dd)
     ListCollection().save()
 

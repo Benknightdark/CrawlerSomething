@@ -2,5 +2,6 @@
     "git.ignoreLimitWarning": true,
     "python.pythonPath": "D:\\anaconda\\envs\\ben\\python.exe",
     "python.linting.enabled": true,
-    "python.formatting.provider": "yapf"
+    "python.formatting.provider": "yapf",
+    "docker.defaultRegistryPath": "moon791017"
 }

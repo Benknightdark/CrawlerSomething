@@ -1,7 +1,7 @@
 # FROM node:alpine as build
 
 #FROM kinlan/puppets:latest
-FROM benpuppeteer
+FROM moon791017/benpuppeteer:latest
 
 
 # Copy the app
@@ -9,7 +9,7 @@ COPY . /app/
 #COPY local.conf /etc/fonts/local.conf
 WORKDIR app
 RUN npm i typescript --save-dev
-RUN npm i --production
+RUN npm i --only=production
 RUN npm run build
 # Add user so we don't need --no-sandbox.
 RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \

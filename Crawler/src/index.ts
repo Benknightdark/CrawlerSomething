@@ -16,8 +16,10 @@ const getContent = async (url: string) => {
 }
 (async () => {
     try {
-        var connection = new Amqp.Connection("amqp://rabbitmq:rabbitmq@localhost:5672/");
-        var queue = connection.declareQueue("crawl-url",{durable:false});
+        const connectString=process.env.AQMPCONNECTSTRING===undefined?'amqp://rabbitmq:rabbitmq@localhost:5672/':process.env.AQMPCONNECTSTRING
+        console.log(connectString)
+        const connection = new Amqp.Connection(connectString);
+        const queue = connection.declareQueue("crawl-url",{durable:false});
          queue.activateConsumer(async (message) => {
         console.log("Message received: " + message.getContent());
         let url: string = message.getContent();

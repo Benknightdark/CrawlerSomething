@@ -45,9 +45,15 @@ services:
       - ./docker-compose.env       
       depends_on:
         - mongo
-        - rabbitmq    
-
-
+        - rabbitmq  
+#------------website-crawler--------------------- #
+  website-crawler:
+      build: ./Crawler
+      restart: always
+      env_file:
+      - ./docker-compose.env       
+      depends_on:
+        - rabbitmq  
 #------------Web API--------------------- #
   web-api:
       build: ./WebAPI

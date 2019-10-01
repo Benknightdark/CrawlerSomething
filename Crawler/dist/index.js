@@ -60,11 +60,13 @@ var getContent = function (url) { return __awaiter(void 0, void 0, void 0, funct
     });
 }); };
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var connection, queue;
+    var connectString, connection_1, queue;
     return __generator(this, function (_a) {
         try {
-            connection = new Amqp.Connection("amqp://rabbitmq:rabbitmq@localhost:5672/");
-            queue = connection.declareQueue("crawl-url", { durable: false });
+            connectString = process.env.AQMPCONNECTSTRING === undefined ? 'amqp://rabbitmq:rabbitmq@localhost:5672/' : process.env.AQMPCONNECTSTRING;
+            console.log(connectString);
+            connection_1 = new Amqp.Connection(connectString);
+            queue = connection_1.declareQueue("crawl-url", { durable: false });
             queue.activateConsumer(function (message) { return __awaiter(void 0, void 0, void 0, function () {
                 var url, $, model, sendQueue, sendMessage;
                 return __generator(this, function (_a) {
@@ -83,7 +85,7 @@ var getContent = function (url) { return __awaiter(void 0, void 0, void 0, funct
                                 createTime: new Date($('.created').first().text()),
                                 content: $('.field-items').text()
                             };
-                            sendQueue = connection.declareQueue("send-crawl-data", { durable: false });
+                            sendQueue = connection_1.declareQueue("send-crawl-data", { durable: false });
                             sendMessage = new amqp_ts_1.Message();
                             sendMessage.content = Buffer.from(JSON.stringify(model));
                             sendQueue.send(sendMessage);
