@@ -55,7 +55,7 @@ services:
       depends_on:
         - rabbitmq  
 #------------Web API--------------------- #
-  web-api:
+  webapi:
       build: ./WebAPI
       restart: always
       ports: 
@@ -66,15 +66,15 @@ services:
         - mongo
         - rabbitmq    
 #------------WebSites--------------------- #
-  # web-site:
-  #     build: ./WebSite
-  #     restart: always
-  #     ports: 
-  #       - 17698:80
-  #     env_file:
-  #     - ./docker-compose.env       
-  #     depends_on:
-  #       -  web-api                 
+  web-site:
+      build: ./WebSite
+      restart: always
+      ports: 
+        - 17698:80
+      env_file:
+      - ./docker-compose.env       
+      depends_on:
+        -  webapi                 
 #-------------Persistent Volumes-------------------- #
 volumes:
   mongodb:
