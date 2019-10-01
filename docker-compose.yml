@@ -41,10 +41,8 @@ services:
   message-broker-service:
       build: ./MessageBroker
       restart: always
-      #  environment:
-      #     NODE_ENV: production
-      #     mongoDBConnection: mongodb://root:example@mongo
-      #     redisConnection: redis://redis-message-bus
+      env_file:
+      - ./docker-compose.env       
       depends_on:
         - mongo
         - rabbitmq         

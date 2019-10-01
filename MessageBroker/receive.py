@@ -1,35 +1,49 @@
-from itertools import chain
-
-import pika
-
 import time
+import pika
+import json
+import os
+import pymongo
+version = ''
+RabbitmqConnectString = ''
+MONGODBConnectString=''
+if "ENV_VERSION" not in os.environ:
+    version = 'development'
+    RabbitmqConnectString = 'amqp://rabbitmq:rabbitmq@localhost:5672/'
+    MONGODBConnectString='mongodb://root:example@localhost:1769/'
+else:
+    if os.environ['ENV_VERSION'] == 'production':
+        version = 'production'
+        RabbitmqConnectString = os.environ['AQMPCONNECTSTRING']
+        MONGODBConnectString='mongodb://root:example@mongo/'
+    else:
+        version = 'development'
+        RabbitmqConnectString = 'amqp://rabbitmq:rabbitmq@localhost:5672/'
+        MONGODBConnectString='mongodb://root:example@localhost:1769/'
+
+def ListCollection():
+    client = pymongo.MongoClient(MONGODBConnectString)
+    DB=client.News
+    collection=DB.ithomes
+    return collection#.find({})
+print(RabbitmqConnectString)
+
+
 def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body.decode("utf8"))
-if __name__ == '__main__':    
+    print('fadsfadsf')
+    #print(body.decode("utf8"))
+    dd=json.loads(body)
+    print(dd)
+   # print(ListCollection().insert_one(dd))
+    ListCollection().insert_one(dd)
+    ListCollection().save()
 
 
-
-
-    while True:
-        try:
-                credentials = pika.PlainCredentials( 'rabbitmq', 'rabbitmq')
-                parameters = pika.ConnectionParameters(host= 'rabbitmq',port=5672,  credentials= credentials)
-                connection = pika.BlockingConnection(parameters)
-                channel = connection.channel()
-                channel.queue_declare(queue='send-crawl-data')    
-                channel.basic_consume(queue='send-crawl-data',
-                                    auto_ack=True,
-                                    
-                                    on_message_callback=callback)    
-                # print(' [*] Waiting for messages. To exit press CTRL+C')
-                channel.start_consuming()
-        # Don't recover if connection was closed by broker
-        except pika.exceptions.ConnectionClosedByBroker:
-            break
-        # Don't recover on channel errors
-        except pika.exceptions.AMQPChannelError:
-            break
-        # Recover on all other connection errors
-        except pika.exceptions.AMQPConnectionError:
-            continue    
-
+parameters = pika.URLParameters(RabbitmqConnectString)
+connection = pika.BlockingConnection(parameters)
+channel = connection.channel()
+channel.queue_declare(queue='send-crawl-data')
+channel.basic_consume(queue='send-crawl-data',
+                      auto_ack=True,
+                      on_message_callback=callback)
+print(' [*] Waiting for messages. To exit press CTRL+C')
+channel.start_consuming()

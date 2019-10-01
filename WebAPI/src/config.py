@@ -11,10 +11,10 @@ class DevConfig(Config):
     
 
 def get_env():
-    if "CONFIG" not in os.environ:
+    if "ENV_VERSION" not in os.environ:
         return DevConfig
     else:
-        if os.environ['CONFIG'] == 'prod':
+        if os.environ['ENV_VERSION'] == 'prodoction':
             return  ProdConfig
         else:
             return DevConfig

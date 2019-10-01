@@ -5,5 +5,5 @@ WORKDIR /app
 ADD . /app
 RUN python3 -m pip install -r requirements.txt
 ENV CONFIG=prod
-CMD ["python3", "./receive.py","&"]
+CMD ["python3", "./receive.py"]
 
