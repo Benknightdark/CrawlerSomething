@@ -6,6 +6,7 @@ from Api.UserApi import user_blueprint
 from config import get_env
 from Middlewares.HttpMiddleware import HTTPMethodOverrideMiddleware
 from Shared.CustomErrorHandler import InvalidUsage
+from flask_cors import CORS
 
 # 初始化 Flask 類別成為 instance
 app = Flask(__name__)
@@ -15,6 +16,7 @@ app.wsgi_app = HTTPMethodOverrideMiddleware(app.wsgi_app)
 app.register_blueprint(ithome_blueprint, url_prefix='/api/ithome')
 
 app.register_blueprint(user_blueprint)
+CORS(app)
 
 
 @app.errorhandler(HTTPException)
