@@ -14,7 +14,7 @@ else:
     if os.environ['ENV_VERSION'] == 'production':
         version = 'production'
         RabbitmqConnectString = os.environ['AQMPCONNECTSTRING']
-        MONGODBConnectString='mongodb://root:example@mongo/'
+        MONGODBConnectString=os.environ['MONGODBDBCONNECTSTRING']
     else:
         version = 'development'
         RabbitmqConnectString = 'amqp://rabbitmq:rabbitmq@localhost:5672/'
