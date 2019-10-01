@@ -69,7 +69,7 @@ services:
         - mongo
         - rabbitmq    
 #------------WebSites--------------------- #
-  web-site:
+  web_site:
       build: ./WebSite
       restart: always
       ports: 
