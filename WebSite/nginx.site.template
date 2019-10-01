@@ -9,9 +9,9 @@ server {
         try_files $uri $uri/ /index.html;
         index  index.html index.htm;
     }
-    location ^~ /api/{
+    location ~/api(.*)$ {
 
-         proxy_pass http://localhost:5000;
+         proxy_pass  ${BACKEND_URI};
 
         # if BACKEND_URI is using TLS/SSL with SNI, this is important!
         proxy_ssl_server_name on;
