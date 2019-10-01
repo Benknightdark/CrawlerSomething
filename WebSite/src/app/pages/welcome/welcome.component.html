@@ -8,3 +8,30 @@
     <button nz-button nzType="primary" nzSize="large" nzSearch (click)="onClick()">爬取網頁資料</button>
   </ng-template>
 </div>
+
+
+<nz-table #basicTable [nzData]="dataSet">
+  <thead>
+    <tr>
+        <th></th>
+
+      <th>title</th>
+      <th>description</th>
+
+      <th>createTime</th>
+      <th>systemInsertTime</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data">
+        <td>
+            <a [href]='data.url' target="_blank">Link</a>
+          </td>
+      <td>{{data.title}}</td>
+      <td>{{data.description}}</td>
+      <td>{{data.createTime}}</td>
+      <td>{{data.systemInsertTime}}</td>
+
+    </tr>
+  </tbody>
+</nz-table>
