@@ -1,10 +1,13 @@
 from flask import jsonify, Flask, Response,json,request
+from Shared.CustomErrorHandler import InvalidUsage
+from Middlewares.HttpMiddleware import HTTPMethodOverrideMiddleware
 from werkzeug.exceptions import HTTPException
 from config import DevConfig
 from config import ProdConfig
 from bson.json_util import dumps
 from  html import escape
 import DB.DataBase
+from Api.ITHomeApi import ithome_blueprint
 import os
 if "CONFIG" not in os.environ:
     config = DevConfig
@@ -17,13 +20,15 @@ else:
 # 初始化 Flask 類別成為 instance
 app = Flask(__name__)
 app.config.from_object(config)
+app.wsgi_app = HTTPMethodOverrideMiddleware(app.wsgi_app)
 
+app.register_blueprint(ithome_blueprint, url_prefix='/api')
 
-# 路由和處理函式配對
-@app.route('/api/ithome')
-def Get():
-    data = DB.DataBase.ListCollection(config.CONNECTSTRING)
-    return Response(dumps(data), mimetype='application/json')
+# # 路由和處理函式配對
+# @app.route('/api/ithome')
+# def Get():
+#     data = DB.DataBase.ListCollection(config.CONNECTSTRING)
+#     return Response(dumps(data), mimetype='application/json')
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
@@ -38,7 +43,11 @@ def handle_exception(e):
     })
     response.content_type = "application/json"
     return response
-
+@app.errorhandler(InvalidUsage)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
 
 @app.route('/user/<username>',methods=['GET', 'POST'])
 def show_user_profile(username):
