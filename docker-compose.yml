@@ -60,6 +60,8 @@ services:
       restart: always
       ports: 
         - 45696:5000
+      expose:
+        - 5000  
       env_file:
       - ./docker-compose.env       
       depends_on:
