@@ -9,6 +9,6 @@ channel = connection.channel()
 channel.queue_declare(queue='crawl-url')
 channel.basic_publish(exchange='',
                       routing_key='crawl-url',
-                      body='https://www.ithome.com.tw/news/133330')
+                      body='https://www.ithome.com.tw/news/133339')
 print(" [x] Sent 'Hello World!'")
 connection.close()
