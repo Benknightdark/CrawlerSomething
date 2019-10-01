@@ -42,7 +42,16 @@ exports.crawlClient = function (config) { return __awaiter(void 0, void 0, void 
     var browser, page, html, $;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, puppeteer.launch({ headless: true })];
+            case 0: return [4 /*yield*/, puppeteer.launch({ headless: true,
+                    //executablePath: '/usr/bin/chromium-browser',
+                    args: [
+                        // Required for Docker version of Puppeteer
+                        '--no-sandbox',
+                        '--disable-setuid-sandbox',
+                        // This will write shared memory files into /tmp instead of /dev/shm,
+                        // because Docker’s default for /dev/shm is 64MB
+                        '--disable-dev-shm-usage'
+                    ] })];
             case 1:
                 browser = _a.sent();
                 return [4 /*yield*/, browser.newPage()];

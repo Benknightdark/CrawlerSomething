@@ -37,6 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var crawlerHelper_1 = require("./Helpers/crawlerHelper");
+var NewsModel_1 = require("./entity/NewsModel");
+// import * as mongoose from "mongoose";
+// import { dbConnect } from './Helpers/DB/Connect'
+var Amqp = require("amqp-ts");
 var getContent = function (url) { return __awaiter(void 0, void 0, void 0, function () {
     var clientConfig, _a, browser, page, $;
     return __generator(this, function (_b) {
@@ -55,14 +59,46 @@ var getContent = function (url) { return __awaiter(void 0, void 0, void 0, funct
     });
 }); };
 (function () { return __awaiter(void 0, void 0, void 0, function () {
-    var htmlContent;
+    var connection, queue, q, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, getContent("https://ithome.com.tw/news/133290")];
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                connection = new Amqp.Connection("amqp://rabbitmq:rabbitmq@localhost:5672/");
+                queue = connection.declareQueue("crawl-url", { durable: false });
+                return [4 /*yield*/, queue.activateConsumer(function (message) { return __awaiter(void 0, void 0, void 0, function () {
+                        var url, $, model;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    console.log("Message received: " + message.getContent());
+                                    url = message.getContent();
+                                    return [4 /*yield*/, getContent(url)];
+                                case 1:
+                                    $ = _a.sent();
+                                    model = new NewsModel_1.NewsModel();
+                                    model = {
+                                        url: url,
+                                        title: $('.page-header').text(),
+                                        description: $('.content-summary').text(),
+                                        createTime: new Date($('.created').first().text()),
+                                        content: $('.field-items').text()
+                                    };
+                                    return [4 /*yield*/, console.log("\u722C\u5B8C\u6B64\u7DB2\u9801\u5167\u5BB9 " + url + "  =>   " + model.title + "(" + new Date() + ")  ")];
+                                case 2:
+                                    _a.sent();
+                                    return [2 /*return*/];
+                            }
+                        });
+                    }); })];
             case 1:
-                htmlContent = _a.sent();
-                console.log(htmlContent('.field-items').text());
-                return [2 /*return*/];
+                q = _a.sent();
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                console.log(error_1);
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
         }
     });
 }); })();
