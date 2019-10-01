@@ -24,7 +24,13 @@ export class WelcomeComponent implements OnInit {
       console.log("Valid");
       this.service.addData(data).subscribe(a => {
         console.log(a)
+        this.url=''
         alert("已開始爬取")
+
+        this.service.getData().subscribe(a => {
+          this.dataSet=a;
+          console.log(a)
+        })
       },
         error => {
           alert(error.message)
