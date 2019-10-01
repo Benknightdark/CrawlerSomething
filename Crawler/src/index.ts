@@ -3,6 +3,7 @@ import { NewsModel, INewsModel, IThomeNewsSchema } from './entity/NewsModel';
 // import * as mongoose from "mongoose";
 // import { dbConnect } from './Helpers/DB/Connect'
 import * as Amqp from "amqp-ts";
+import { Message } from 'amqp-ts';
 
 const getContent = async (url: string) => {
     let clientConfig: ClientConfig = new ClientConfig();
@@ -17,7 +18,7 @@ const getContent = async (url: string) => {
     try {
         var connection = new Amqp.Connection("amqp://rabbitmq:rabbitmq@localhost:5672/");
         var queue = connection.declareQueue("crawl-url",{durable:false});
-       const q=await  queue.activateConsumer(async (message) => {
+         queue.activateConsumer(async (message) => {
         console.log("Message received: " + message.getContent());
         let url: string = message.getContent();
         const $ = await getContent(url);
@@ -29,9 +30,19 @@ const getContent = async (url: string) => {
             createTime: new Date($('.created').first().text()),
             content: $('.field-items').text()
         };     
-          await console.log(`爬完此網頁內容 ${url}  =>   ${model.title}(${new Date()})  `)
-         });
+
+          const sendQueue = connection.declareQueue("send-crawl-data",{durable:false});
+          const sendMessage=new Message();
+          sendMessage.content=Buffer.from(JSON.stringify(model));
+          sendQueue.send(sendMessage)
          
+          await console.log(`爬完此網頁內容 ${url}, 並已送出訊息  =>   ${model.title}(${new Date()})  `)
+           sendQueue.delete();
+           //queue.delete();
+
+         });
+
+
         
         // // it is possible that the following message is not received because
         // // it can be sent before the queue, binding or consumer exist
