@@ -30,7 +30,8 @@ const getContent = async (url: string) => {
             title: $('.page-header').text(),
             description: $('.content-summary').text(),
             createTime: new Date($('.created').first().text()),
-            content: $('.field-items').text()
+            content: $('.field-items').text(),
+            systemInsertTime:new Date()
         };     
 
           const sendQueue = connection.declareQueue("send-crawl-data",{durable:false});

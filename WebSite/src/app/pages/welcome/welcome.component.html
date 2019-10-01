@@ -1,5 +1,10 @@
 <div class="example-input">
-  <input nz-input placeholder="large size" nzSize="large" />
-  <input nz-input placeholder="default size" nzSize="default" />
-  <input nz-input placeholder="small size" nzSize="small" />
+  <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton">
+    <input type="text"
+    [(ngModel)]="url"
+    nz-input placeholder="輸入要爬取的ITHome新聞網址 (Example:https://www.ithome.com.tw/news/133347)" />
+  </nz-input-group>
+  <ng-template #suffixButton>
+    <button nz-button nzType="primary" nzSize="large" nzSearch (click)="onClick()">爬取網頁資料</button>
+  </ng-template>
 </div>

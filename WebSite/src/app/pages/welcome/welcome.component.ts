@@ -7,13 +7,25 @@ import { WelcomeService } from './welcome.service';
   styleUrls: ['./welcome.component.css']
 })
 export class WelcomeComponent implements OnInit {
-
-  constructor(private service:WelcomeService) { }
+  url: string;
+  constructor(private service: WelcomeService) { }
 
   ngOnInit() {
-    this.service.getData().subscribe(a=>{
+    this.service.getData().subscribe(a => {
       console.log(a)
     })
+  }
+  onClick() {
+    const data = { url: this.url };
+    this.service.addData(data).subscribe(a => {
+      console.log(a)
+      alert("已開始爬取")
+    },
+      error => {
+        alert(error.message)
+      }
+    )
+
   }
 
 }

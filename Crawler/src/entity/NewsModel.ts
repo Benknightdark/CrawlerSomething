@@ -6,6 +6,7 @@ export class NewsModel  {
     description: string;
     content: string;
     createTime: Date;
+    systemInsertTime:Date
 }
 
 export interface INewsModel extends mongoose.Document{

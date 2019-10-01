@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -7,11 +7,16 @@ import { environment } from 'src/environments/environment';
 })
 export class WelcomeService {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient) {
+
+
+   }
   getData(){
     return this.http.get(`${environment.apiUrl}/api/ithome/list`);
   }
   addData(data){
-    return this.http.post(`${environment.apiUrl}/api/ithome`,data);
+    const headers = new HttpHeaders().set('Content-Type', 'text');
+
+    return this.http.post<string>(`${environment.apiUrl}/api/ithome/`,data);
   }
 }

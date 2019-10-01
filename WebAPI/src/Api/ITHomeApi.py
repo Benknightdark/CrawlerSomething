@@ -1,4 +1,4 @@
-from flask import jsonify, Flask, Response,json,request,Blueprint
+from flask import jsonify, Flask, Response,json,request,Blueprint, make_response
 from Middlewares.HttpMiddleware import HTTPMethodOverrideMiddleware
 from config import DevConfig
 from config import ProdConfig
@@ -28,4 +28,6 @@ def Post():
                         routing_key='crawl-url',
                         body=content['url'])
     connection.close()
-    return Response("OK", mimetype='application/json')
+    data = {'message': 'Created', 'code': 'SUCCESS'}
+    return make_response(jsonify(data), 201)
+    #Response(dumps(content), mimetype='application/json')
