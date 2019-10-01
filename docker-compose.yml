@@ -59,7 +59,7 @@ services:
       build: ./WebAPI
       restart: always
       ports: 
-        - 56969:5000
+        - 45696:5000
       env_file:
       - ./docker-compose.env       
       depends_on:

@@ -15,6 +15,8 @@ FROM nginx:alpine
 # #COPY default.conf /etc/nginx/conf.d/default.conf
 # COPY nginx.site.template /etc/nginx/conf.d/
 COPY --from=node-builder /src/dist/WebSite/. /usr/share/nginx/html
+COPY nginx.site.template /etc/nginx/conf.d/
+CMD envsubst '${BACKEND_URI}' < /etc/nginx/conf.d/nginx.site.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'
 #COPY /dist/. /usr/share/nginx/html
 # CMD envsubst '${BACKEND_URI}' < /etc/nginx/conf.d/nginx.site.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'
 EXPOSE  80
