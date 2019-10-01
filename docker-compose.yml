@@ -45,7 +45,20 @@ services:
       - ./docker-compose.env       
       depends_on:
         - mongo
-        - rabbitmq         
+        - rabbitmq    
+
+
+#------------Web API--------------------- #
+  web-api:
+      build: ./WebAPI
+      restart: always
+      ports: 
+        - 56969:5000
+      env_file:
+      - ./docker-compose.env       
+      depends_on:
+        - mongo
+        - rabbitmq                
 #-------------Persistent Volumes-------------------- #
 volumes:
   mongodb:
