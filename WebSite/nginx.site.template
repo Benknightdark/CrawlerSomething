@@ -9,7 +9,7 @@ server {
         try_files $uri $uri/ /index.html;
         index  index.html index.htm;
     }
-    location ^~ /api/v1{
+    location ^~ /api/{
 
          proxy_pass http://localhost:5000;
 
