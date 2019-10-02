@@ -8,12 +8,8 @@
 - MongoDB Management
 
 # Usage
-````
-docker compose up 
-go to =>
- [Google](http://localhost:17698 "Google")
- [Google](http://www.google.com/)
+* docker compose up 
 
- 
-````
+* Open   [http://localhost:17698](http://localhost:17698 "http://localhost:17698") in browser
+
 
