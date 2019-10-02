@@ -1,22 +1,19 @@
-# ITHome CrawlerSomething
-- WebSite
+# ITHome新聞爬蟲小幫手
+- WebSite (Angular)
 - Crawler (node)
-  - Receive CrawlerMessage
-  - Send SaveDataMessage
 - web api (python)
-  - Send CrawlerMessage
 - MessageBus (python)
-  - Recieve SaveDataMessage
 - MessageBroker (RabbitMQ)
 - MongoDB
-  ````
-  {
-      "url",
-       "title",
-       "description"
-      "content",
-      "createTime"
-  }
-  ````
 - MongoDB Management
+
+# Usage
+````
+docker compose up 
+go to =>
+ [Google](http://localhost:17698 "Google")
+ [Google](http://www.google.com/)
+
+ 
+````
 
